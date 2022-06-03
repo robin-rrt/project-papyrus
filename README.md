@@ -22,5 +22,5 @@ Install [NodeJS]([url](https://nodejs.org/en/))
 
 ### How to push changes to main branch (for contributors)
 - `git add .`
-- `git commit -m '<any commit message'>
+- `git commit -m "<any commit message>"`
 - `git push`
