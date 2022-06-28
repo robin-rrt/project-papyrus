@@ -41,7 +41,7 @@ const getAllStudents = async (req, res, next) => {
             });
             console.log(studentsArray);
             // res.send(studentsArray);
-            req.body = studentsArray;
+            req.students = studentsArray;
             next();
             // return studentsArray;
 

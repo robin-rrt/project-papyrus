@@ -1,4 +1,5 @@
 var express = require('express');
+const { body,validationResult } = require('express-validator');
 var router = express.Router();
 var parseUrl = require('body-parser');
 
@@ -18,8 +19,14 @@ router.use(express.json())
 
 /* GET home page. */
 router.get('/', getAllStudents, function(req, res, next) {
-  console.log(JSON.stringify(req.body));
-  res.render('dashboard', { title: 'Project Papyrus', students: req.body });
+  console.log(JSON.stringify(req.students));
+  res.render('dashboard', { title: 'Project Papyrus', students: req.students });
+});
+
+router.post('/', getAllStudents, body('username').trim(), function(req, res, next) {
+  const username = req.body.username;
+  console.log(JSON.stringify(req.students));
+  res.render('dashboard', { title: 'Project Papyrus', students: req.students, username: username });
 });
 
 // router.post('/', addStudent);
