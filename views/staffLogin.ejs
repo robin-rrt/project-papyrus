@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Login</title>
+	<title>Staff Login</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
@@ -22,7 +22,7 @@
 	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="stylesheets/login-util.css">
-	<link rel="stylesheet" type="text/css" href="stylesheets/login-main.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/staff-login-main.css">
 <!--===============================================================================================-->
 
 </head>
@@ -32,10 +32,10 @@
 		<div class="container-login100">
 			<div class="wrap-login100">
                   
-				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178" method="post" action="/dashboard">
+				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178" method="post" action="staff-dashboard">
                     
 					<span class="login100-form-title">
-						Sign In
+						Staff Login
 					</span>
         
 
@@ -67,22 +67,15 @@
 					<!-- </a> -->
 					</div>
 
-					<div class="flex-col-c p-t-170 p-b-40">
+                    <div class="flex-col-c p-t-170 p-b-40">
 						<span class="txt1 p-b-9">
-							Don’t have an account?
+							Are you a Faculty or Student?
 						</span>
 
-						<a href="/register" class="txt3">
-							Sign up now
+						<a href="/login" class="txt3">
+							Login here
 						</a>
-						<span class="txt1 p-b-9">
-							Are you a reprography staff?
-						</span>
-
-						<a href="/staff-login" class="txt3">
-							Go to Staff Login
 					</div>
-			
 				</form>
 			</div>
 		</div>
