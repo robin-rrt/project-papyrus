@@ -14,6 +14,7 @@ var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 var staffLoginRouter = require('./routes/staffLogin');
 var staffDashboardRouter = require('./routes/staff-dashboard');
+var userDashboardRouter = require('./routes/user-dashboard');
 var registerRouter = require('./routes/register');
 var dashboardRouter = require('./routes/dashboard');
 var app = express();
@@ -30,11 +31,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
+
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/staff-login', staffLoginRouter);
 app.use('/staff-dashboard', staffDashboardRouter);
+app.use('/user-dashboard', userDashboardRouter);
 app.use('/register', registerRouter);
 app.use('/dashboard', dashboardRouter);
 

@@ -24,7 +24,7 @@ router.post('/', function(req,res,next){
     res.redirect('staff-dashboard/pending');
 })
 
-router.post('/pending', function(req,res,next){
+router.post ('/pending', function(req,res,next){
     res.render('staff-pending', {title: 'Project Papyrus'});
 })
 
