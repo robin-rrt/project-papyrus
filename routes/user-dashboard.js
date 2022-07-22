@@ -13,7 +13,11 @@ const {addStudent,
   upload,
   getListFiles,
   download,
-  addOrder
+  addOrder,
+  getOrder,
+  deductBalance,
+  getUserPendingOrders,
+  getUserCompletedOrders
  } = require('../controllers/controller');
 const e = require('express');
 const { ContextRunnerImpl } = require('express-validator/src/chain');
@@ -42,25 +46,38 @@ router.get('/new', function(req,res,next){
     res.render('user-home', {title: 'Project Papyrus'});
 })
 
-router.post('/new/order', upload, addOrder, function(req,res,next){    
-    console.log(req.publicUrl);
-    res.render('user-order-summary', {title: 'Project Papyrus', publicUrl: req.publicUrl});
+router.post('/new', function(req,res,next){
+    res.render('user-home', {title: 'Project Papyrus'});
 })
 
-router.get('/new/order', function(req,res,next){  
+
+router.post('/new/order', upload, addOrder, getOrder, function(req,res,next){    
+    console.log(req.publicUrl);
+    console.log(req.fileName);
+    console.log("REQUESTING DATA: " + JSON.stringify(req.order_data));
+    res.render('user-order-summary', {title: 'Project Papyrus', publicUrl: req.publicUrl, order_data: req.order_data, fileName: req.fileName});
+})
+
+router.get('/new/order', function(req,res,next){ 
+
     res.render('user-order-summary', {title: 'Project Papyrus'});
+})
+
+router.post('/new/order/:order_id', deductBalance, function(req,res,next){
+    res.render('user-order-complete', {title: 'Project Papyrus', order_data: req.order_data});
 })
 
 router.get('/files', getListFiles, function(req,res){
     res.status(200);
 })
 
-router.get('/collect', function(req,res,next){
-    res.render('staff-collect', {title: 'Project Papyrus'});
+router.get('/pending', getUserPendingOrders, function(req,res,next){
+    console.log("ORDER ARRAY: " + req.order_array);
+    res.render('user-pending', {title: 'Project Papyrus', order_array: req.order_array});
 })
 
-router.get('/archived', function(req,res,next){
-    res.render('staff-archived', {title: 'Project Papyrus'});
+router.get('/archive', getUserCompletedOrders, function(req,res,next){
+    res.render('user-archive', {title: 'Project Papyrus', order_array: req.order_array});
 })
 
 

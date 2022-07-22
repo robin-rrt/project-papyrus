@@ -6,12 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>User Dashboard - Review Order</title>
+        <title>User Dashboard - Order Completed</title>
         <link href="/stylesheets/user-styles.css" rel="stylesheet" />
         <link href="/stylesheets/user-styles2.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     </head>
-    <body class="sb-nav-fixed">
+    <body class="bodyord">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
             <img src="/images/papyrus-logo-transparent.png" alt="homepage" class="papy-logo" />
@@ -70,7 +70,7 @@
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in by:</div>
-                        Student User
+                        user@saintgits.org
                     </div>
                 </nav>
             </div>
@@ -81,35 +81,19 @@
                     
                     
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">&emsp;Review Order</h1>
+                        <h1 class="mt-4">&emsp;</h1>
+                       
+                      
                         <br><br><br>
                         <div class="frame1">
-                            <div class="frame2"><br>
-                                <h5 class="upldfile">Uploaded File &emsp;&emsp;<a href="<%= publicUrl %> "><%= fileName %></a></h5><br>
-                                <div class="line-1"></div>
-                                <br><br>
-                                <% if(order_data.colour == 1 ){ %>
-                                    <h5 class="upldfile"><span style="font-weight:bold">Black & White print</span> - ₹1/copy</h5>
-                                    <%} else { %>
-                                    <h5 class="upldfile"><span style="font-weight:bold">Colour print</span> - ₹10/copy</h5>
-                                    <% } %>
-                                    <% if(order_data.binding != 0){ %>
-                                        <h5 class="upldfile"><span style="font-weight:bold">Binding</span> - ₹75/copy</h5>
-                                        <%} if(order_data.lamination != 0) { %>
-                                        <h5 class="upldfile"><span style="font-weight:bold">Lamination</span> - ₹50/copy</h5>
-                                        <% } %>
-                                    <h5 class="upldfile"><span style="font-weight:bold">Page Orientation</span> - <%= order_data.page_orientation %> </h5>
-                                    <h5 class="upldfile"><span style="font-weight:bold">Copies</span> - <%= order_data.copies %> </h5>
-                                <!-- <h5 class="upldfile">Black and White</h5><br> -->
-                                <div class="line-1"></div>
-                                <br><br>
-                                <h5 class="upldfile">Total Amount - <span style="font-weight:bold; font-size: larger; color: green; background-color: rgb(130, 252, 134); padding: 5px; border-radius: 10px;">₹<%= order_data.price %></span> </h5><br>
-                                <br>
-                                <form method="post" action="/user-dashboard/new/order/<%= order_data.order_id %>">
-                                <button class="button-03" role="button">Pay with GitsPay</button><br><br>
-                                </form>
-                                <button class="button-03" role="button">Pay with RazorPay (Coming Soon)</button>
-                            </div>
+                           <br><br><br> <br><br>
+                           <img src="/images/trophy.png" alt="trophy" class="trophy"><br>
+                           <p1 class="p1">Success!</p1><br>
+                        <p2 class="p2">We've received your request of token number</p2><br><br>
+                        <g class="g"><%= order_data.order_id %> </g><br><br>
+                        <p2 class="p2">Sit back and relax while we notify you when your request has been processed</p2><br>
+                        <br>
+                        <button class="button-031" role="button">Back to Dashboard</button><a href='/user-dashboard/new'><button class="button-031" role="button">New Order</button>
                             </div>
                         </div>
                     </div>    
@@ -127,5 +111,5 @@
 
 
 
-
+<!---->
 
