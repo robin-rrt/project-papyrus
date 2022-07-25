@@ -1,0 +1,31 @@
+.reg_form{
+    width: 38em;
+    height: 44em;
+    box-shadow: .1em .1em .1em .1em;
+    text-align: left;
+    padding: 1em;
+    position: absolute;
+    margin-left: 20em;
+    margin-top: -46em;
+    border-radius: 10px;
+    position: relative;
+}
+
+.navbar{
+    width: 14em;
+    height: 47.5em;
+    
+}
+
+.submit-btn{
+    width: 36em;
+}
+
+.navbar-nav{
+    margin-top: -20em;
+}
+
+.img{
+    width: 12em;
+    margin-top: -8em;
+}

@@ -159,6 +159,7 @@ const getListFiles = async (req, res) => {
   const download = async (req, res) => {
     try {
         const [metaData] = await bucket.file(req.params.name).getMetadata();
+        console.log(metaData);
         res.redirect(metaData.mediaLink);
         
       } catch (err) {
@@ -369,6 +370,132 @@ const getListFiles = async (req, res) => {
           next();
         }
 
+        const getAllPendingOrders = async (req,res,next) => {
+          const ordersRef = firestore.collection('orders');
+          const orders_snapshot = await ordersRef
+          .where('payment_status', '==', 'paid')
+          .where('order_status', '==', 'pending')
+          .orderBy('order_id', 'asc')
+          .get();
+          if (orders_snapshot.empty) {
+            console.log('No matching documents.');
+            return;
+          }  
+          const pending_order_array = [];
+
+          orders_snapshot.forEach(doc => {
+            req.order_data = doc.data();
+            pending_order_array.push(doc.data());
+          });
+          console.log(pending_order_array);
+          req.pending_order_array = pending_order_array;
+
+          next();
+        }
+
+        const markAsComplete = async(req,res,next) => {
+          const ordersRef = firestore.collection('orders');
+          let order_docid;
+          const orders_snapshot = await ordersRef
+          .where('order_id', '==', req.params.order_id)
+          .where('order_status', '==', 'pending')
+          .get();
+          if (orders_snapshot.empty) {
+            console.log('No matching documents.');
+            return;
+          }  
+          orders_snapshot.forEach(doc => {
+            order_docid = doc.id;
+            req.order_data = doc.data();
+          });
+
+          try {
+            await firestore.runTransaction(async (t) => {
+              t.update(ordersRef.doc(order_docid), {order_status: 'collect now'});
+            });
+            console.log('Transaction success!');
+          } catch (e) {
+            console.log('Transaction failure: ', e);
+            
+          }
+        next();
+        }
+
+        const getAllCollectNowOrders = async(req,res,next) => {
+          const ordersRef = firestore.collection('orders');
+          const orders_snapshot = await ordersRef
+          .where('payment_status', '==', 'paid')
+          .where('order_status', '==', 'collect now')
+          .orderBy('order_id', 'asc')
+          .get();
+          if (orders_snapshot.empty) {
+            console.log('No matching documents.');
+            return;
+          }  
+          const collect_order_array = [];
+
+          orders_snapshot.forEach(doc => {
+            req.order_data = doc.data();
+            collect_order_array.push(doc.data());
+          });
+          console.log(collect_order_array);
+          req.collect_order_array = collect_order_array;
+
+          next();
+        }
+
+        const getAllCompletedOrders = async(req,res,next) => {
+          const ordersRef = firestore.collection('orders');
+          const orders_snapshot = await ordersRef
+          .where('payment_status', '==', 'paid')
+          .where('order_status', '==', 'completed')
+          .orderBy('order_id', 'desc')
+          .get();
+          if (orders_snapshot.empty) {
+            console.log('No matching documents.');
+            return;
+          }  
+          const completed_order_array = [];
+
+          orders_snapshot.forEach(doc => {
+            req.order_data = doc.data();
+            completed_order_array.push(doc.data());
+          });
+          console.log(completed_order_array);
+          req.completed_order_array = completed_order_array;
+
+          next();
+        }
+
+        const markAsCollected = async(req,res,next) => {
+          const ordersRef = firestore.collection('orders');
+          let order_docid;
+          const orders_snapshot = await ordersRef
+          .where('order_id', '==', req.params.order_id)
+          .where('order_status', '==', 'collect now')
+          .get();
+          if (orders_snapshot.empty) {
+            console.log('No matching documents.');
+            return;
+          }  
+          orders_snapshot.forEach(doc => {
+            order_docid = doc.id;
+            req.order_data = doc.data();
+          });
+
+          try {
+            await firestore.runTransaction(async (t) => {
+              t.update(ordersRef.doc(order_docid), {order_status: 'completed'});
+            });
+            console.log('Transaction success!');
+          } catch (e) {
+            console.log('Transaction failure: ', e);
+            
+          }
+        next();
+        }
+      
+
 
 
 
@@ -387,7 +514,12 @@ module.exports = {
     getOrder,
     deductBalance,
     getUserPendingOrders,
-    getUserCompletedOrders
+    getUserCompletedOrders,
+    getAllPendingOrders,
+    markAsComplete,
+    getAllCollectNowOrders,
+    getAllCompletedOrders,
+    markAsCollected
 }
 
 

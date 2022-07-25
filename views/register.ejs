@@ -2,42 +2,60 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title><%= title %></title>
-        <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
-        <!-- Font Awesome icons (free version)-->
-        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-        <!-- Google fonts-->
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&amp;display=swap" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="/stylesheets/landing-styles.css" rel="stylesheet" />
+        <title>Student Registration</title>
+        <link href="/stylesheets/register-style.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>        
+        <!-- <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script> -->
+        <script src="/javascripts/auth.js" type="text/javascript"></script>
     </head>
     <body>
-        <!-- Background Video-->
-        <video class="bg-video" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop"><source src="images/landing-mp4/saintgits-bg-720.mp4" type="video/mp4" /></video>
-        <!-- Masthead-->
-        <div class="masthead">
-            <div class="masthead-content text-white">
-                <div class="container-fluid px-4 px-lg-0">
-                    <img class="logo" src="images/papyrus-logo-cropped-2.png" alt="papyrus-logo"/>
-                    <br><br>
-                    <p class="mb-5"><span class="fst-italic">Bringing the Saintgits Reprographic Centre to your fingertips</span> 🖖 💻 🤘 </p>
-                    
-                    <div class="col-auto"><a href="/login"><button class="btn btn-primary" id="login" type="button">Login ✨</button></a>
-                    <a href="/register"><button class="btn btn-primary" id="register" type="button">Register 🖋</button></a></div>
+        
+        <nav class="navbar navbar-expand-lg bg-light">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <img src="/images/papyrus-logo-transparent.png" alt="" class="img">
+                    </li>
+            </ul>
+        </nav>
+        <div class="container">
+            
+                <div class="reg_form">
+                    <form method="post" action="/login">
+                        <legend class="mb-4">REGISTER</legend>
+                        <hr class="mb-4">
+                        <label for="" class="form-label">Admission no</label>
+                        <input type="text" name="admisson_no" id="admission_no" class="form-control mb-2">
+                        <label for="" class="form-label">Name</label>
+                        <input type="text" name="name" id="full_name" class="form-control mb-2">
+                        <label for="" class="form-label">Phone number</label>
+                        <input type="text" name="phone_number" id="phone_number" class="form-control mb-2">
+                        <label for="" class="form-label">College Email</label>
+                        <input type="email" name="email" id="email" class="form-control mb-2">
+                        <label for="" class="form-label">Password</label>
+                        <input type="password" name="password" id="password" class="form-control mb-2">
+                        <label for="" class="form-label">Branch</label>
+                        <input type="text" name="branch" id="branch" class="form-control mb-2">
+                        <label for="" class="form-label">Semester</label>
+                        <input type="text" name="semester" id="semester" class="form-control mb-2">
+                        <a href='javascript:;' class="btn btn-success mt-2" onclick="register()">
+                                Register
+                        </a>
+                        <a href='/login' class="btn btn-secondary mt-2">
+                            Back to Login
+                    </a>
+                    </div>
+                </form>
+        </div>
+    </body>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="/javascripts/scripts.js"></script>
 
-                    <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     </body>
 </html>

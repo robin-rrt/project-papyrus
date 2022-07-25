@@ -9,8 +9,10 @@
         <title>Admin Dashboard - Pending</title>
         <link href="/stylesheets/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        
     </head>
     <body class="sb-nav-fixed">
+        
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
             <img src="/images/papyrus-logo-transparent.png" alt="homepage" class="papy-logo" />
@@ -102,83 +104,78 @@
                             </tr>
                             </thead>
                             <tbody>
-                            
+                            <!-- ///////////////////////////////////// -->
+
+                            <% for (var i =0; i < pending_order_array.length;  i++ ) { %>
+                                <% var fileNameArray = pending_order_array[i].file_path.split('/'); %> 
                             <tr>
-                            <th scope="row"></th>
-                            <td><span data-ordertype="bnw" >B&W</span> <span data-ordertype="lamination">L</span></td>
-                            <td>SGCE8342861</td>
-                            <td><span class="badge bg-warning text-dark">Pending</span></td>
-                            <td>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                    Process Order
-                                </button>
+                            <th scope="row"><a href="<%= pending_order_array[i].file_path %> "><%= fileNameArray[4] %></a></th>
+                                <td>
+                                    <% if(pending_order_array[i].colour == 1){ %> 
+                                        <span style="font-weight:bold; color: rgb(28, 28, 28); background-color: rgb(219, 219, 219); padding: 2px 5px 2px 5px; border-radius: 5px;">B&W</span> 
+                                    <% } else { %>
+                                        <span style="font-weight:bold; color: rgb(147, 35, 1); background-color: rgb(255, 218, 159); padding: 2px 5px 2px 5px; border-radius: 5px;">CLR</span>
+                                    <% } %>
+                                    <% if(pending_order_array[i].binding != 0){ %>
+                                        <span style="font-weight:bold; color: rgb(114, 0, 142); background-color: rgb(255, 181, 229); padding: 2px 5px 2px 5px; border-radius: 5px;">Bind</span>
+                                        <%} if(pending_order_array[i].lamination != 0) { %>
+                                       <span style="font-weight:bold; color: rgb(180, 108, 0); background-color: rgb(248, 236, 159); padding: 2px 10px 2px 10px; border-radius: 5px;"> L</span>
+                                        <% } %>
+                                </td>
+                                <td><%= pending_order_array[i].order_id %> </td>
+                                <td><span class="badge bg-warning text-dark">Pending</span></td>
+                                <td>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-process-order-<%= pending_order_array[i].order_id %>">
+                                        Process Order
+                                    </button>
                                 
                                 <!-- Modal -->
-                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal fade" id="modal-process-order-<%= pending_order_array[i].order_id %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-fullscreen">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">ORDER NUMBER: SGCE8342861</h5>
+                                        <h5 class="modal-title" id="staticBackdropLabel">ORDER NUMBER: <%= pending_order_array[i].order_id %> </h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                        <h2>[FILE NAME]</h2>
-                                        <li>Black & White</li>
-                                        <li>Lamination</li>
-                                        <li>Orientation: Landscape</li>
-                                        <li>Pages: All</li>
+                                            
+                                        <h2 ><a href="<%= pending_order_array[i].file_path %>"  id="fileName"><%= fileNameArray[4] %></a></h2>
+                                        <ul>
+                                            <% if(pending_order_array[i].colour == 1){  %> 
+                                                <li><span style="font-weight:bold; color: rgb(28, 28, 28); background-color: rgb(219, 219, 219); padding: 2px 5px 2px 5px; border-radius: 5px;">Black & White Print</span></li>
+                                            <% } else { %>
+                                                <li><span style="font-weight:bold; color: rgb(147, 35, 1); background-color: rgb(255, 218, 159); padding: 2px 5px 2px 5px; border-radius: 5px;">Colour Print</span></li>
+                                            <% } %>
+                                            <% if(pending_order_array[i].binding != 0){ %>
+                                                <li><span style="font-weight:bold; color: rgb(114, 0, 142); background-color: rgb(255, 181, 229); padding: 2px 5px 2px 5px; border-radius: 5px;">Bind</span></li>
+                                                <%} if(pending_order_array[i].lamination != 0) { %>
+                                               <li><span style="font-weight:bold; color: rgb(180, 108, 0); background-color: rgb(248, 236, 159); padding: 2px 10px 2px 10px; border-radius: 5px;">Lamination</span></li>
+                                                <% } %>
+                                        <li>Orientation: <%= pending_order_array[i].page_orientation %> </li>
+                                        <li>Copies: <%= pending_order_array[i].copies %> </li>
+                                        </ul>
                                         <br>
-                                        <button type="button" class="btn btn-primary">Download File</button>
-                                        <button type="button" class="btn btn-primary" style="background-color: green; border-color: green;">Mark As Complete & Request Collection</button>
+                                        <form method="get" action="/staff-dashboard/pending/download/<%= fileNameArray[4] %>">
+                                        <a><button type="submit" class="btn btn-primary" >Download File</button></a>
+                                        </form>
+                                        <form method="post" action="/staff-dashboard/collect/<%= pending_order_array[i].order_id %>">
+                                        <button type="submit" class="btn btn-primary" style="background-color: green; border-color: green;">Mark As Processed & Request Collection</button>
+                                        </form>
                                         </div>
                                         <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" style="background-color: green; border-color: green;">Mark As Complete & Request Collection</button>
+                                        <form method="post" action="/staff-dashboard/collect/<%= pending_order_array[i].order_id %>">
+                                        <button type="submit" class="btn btn-primary" style="background-color: green; border-color: green;">Mark As Complete & Request Collection</button>
+                                        </form>
                                         </div>
                                     </div>
                                     </div>
                                 </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <th scope="row"></th>
-                                <td><span data-ordertype="bnw" >B&W</span> <span data-ordertype="lamination">L</span></td>
-                                <td>SGCE55554444</td>
-                                <td><span class="badge bg-warning text-dark">Pending</span></td>
-                                <td>
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                        Process Order
-                                    </button>
-                                    
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-fullscreen">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                            <h5 class="modal-title" id="staticBackdropLabel">ORDER NUMBER: SGCE55554444</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                            <h2>[FILE NAME]</h2>
-                                            <li>Black & White</li>
-                                            <li>Lamination</li>
-                                            <li>Orientation: Landscape</li>
-                                            <li>Pages: All</li>
-                                            <br>
-                                            <button type="button" class="btn btn-primary">Download File</button>
-                                            <button type="button" class="btn btn-primary" style="background-color: green; border-color: green;">Mark As Complete & Request Collection</button>
-                                            </div>
-                                            <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary" style="background-color: green; border-color: green;">Mark As Complete & Request Collection</button>
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </td>
-                                </tr>
+                            <% } %>
+                            <!-- /////////////////////////////////////////// -->
                             </tbody>
                             </table>
                             <!-- Full screen modal -->
@@ -214,6 +211,19 @@
         </div>
         <script>
             categoryColor = doc
+        </script>
+        <script>
+        function getFileDownload(url) {
+                // This can be downloaded directly:
+                const xhr = new XMLHttpRequest();
+                xhr.responseType = 'blob';
+                xhr.onload = (event) => {
+                const blob = xhr.response;
+                };
+                xhr.open('GET', url);
+                xhr.send();
+            }
+            
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="/javascripts/scripts.js"></script>

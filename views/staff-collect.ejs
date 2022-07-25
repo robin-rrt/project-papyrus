@@ -102,23 +102,35 @@
                             </tr>
                             </thead>
                             <tbody>
-                    
+                                
+                    <!-- ///////////////////////////////////////////////////////////// -->
+                    <% for (var i =0; i < order_array.length;  i++ ) { %>
+                        <% var fileNameArray = order_array[i].file_path.split('/'); %>
                             <tr>
-                            <th scope="row"></th>
-                            <td>##</td>
-                            <td>SGCE8342861</td>
-                            <td><span class="badge bg-primary">Collect Now</span></td>
-                            <td><i class="collapsible" aria-hidden="true"></i></td>
-                            </tr>
-                            <tr>
-                            <th scope="row"></th>
-                            <td>##</td>
-                            <td>SGCE8342861</td>
+                            <th scope="row"><a href="<%= order_array[i].file_path %> "><%= fileNameArray[4] %></th>
+                            <td>
+                                <% if(order_array[i].colour == 1){ %> 
+                                <span style="font-weight:bold;  color: rgb(28, 28, 28); background-color: rgb(219, 219, 219); padding: 2px 5px 2px 5px; border-radius: 5px;">B&W</span> 
+                            <% } else { %>
+                                <span style="font-weight:bold;  color: rgb(147, 35, 1); background-color: rgb(255, 218, 159); padding: 2px 5px 2px 5px; border-radius: 5px;">CLR</span>
+                            <% } %>
+                            <% if(order_array[i].binding != 0){ %>
+                                <span style="font-weight:bold; color: rgb(114, 0, 142); background-color: rgb(255, 181, 229); padding: 2px 5px 2px 5px; border-radius: 5px;">Bind</span>
+                                <%} if(order_array[i].lamination != 0) { %>
+                               <span style="font-weight:bold; color: rgb(180, 108, 0); background-color: rgb(248, 236, 159); padding: 2px 10px 2px 10px; border-radius: 5px;"> L</span>
+                                <% } %>
+                            </td>
+                            <td><%= order_array[i].order_id %></td>
                             <td><span class="badge bg-primary">Collect Now</span></td>
                             <td>
-                                <i class="fa" aria-hidden="true"></i>
-                                </td>
+                                <form method="post" action="/staff-dashboard/archived/<%= order_array[i].order_id %> ">
+                                <button type="submit" class="btn btn-warning">
+                                    Mark as Collected
+                                </button>
+                                </form>
+                            </td>
                             </tr>
+                       <% } %>      
                             
                             </tbody>
                             </table>

@@ -7,7 +7,13 @@ const {addStudent,
   getAllStudents, 
   getStudent,
   updateStudent,
-  deleteStudent
+  deleteStudent,
+  getAllPendingOrders,
+  download,
+  markAsComplete,
+  getAllCollectNowOrders,
+  getAllCompletedOrders,
+  markAsCollected
  } = require('../controllers/controller');
 const e = require('express');
 
@@ -24,20 +30,36 @@ router.post('/', function(req,res,next){
     res.redirect('staff-dashboard/pending');
 })
 
-router.post ('/pending', function(req,res,next){
-    res.render('staff-pending', {title: 'Project Papyrus'});
+router.post ('/pending', getAllPendingOrders, function(req,res,next){
+
+    res.render('staff-pending', {title: 'Project Papyrus', pending_order_array: req.pending_order_array});
 })
 
-router.get('/pending', function(req,res,next){
-    res.render('staff-pending', {title: 'Project Papyrus'});
+router.get('/pending', getAllPendingOrders, function(req,res,next){
+    res.render('staff-pending', {title: 'Project Papyrus', pending_order_array: req.pending_order_array});
 })
 
-router.get('/collect', function(req,res,next){
-    res.render('staff-collect', {title: 'Project Papyrus'});
+router.get('/pending/download/:name', download, function(req,res,next){
+    res.status(200);
 })
 
-router.get('/archived', function(req,res,next){
-    res.render('staff-archived', {title: 'Project Papyrus'});
+router.post ('/collect/:order_id', markAsComplete, function(req,res,next){
+    res.status(200);
+    res.redirect('/staff-dashboard/collect');
+})
+
+
+router.get('/collect', getAllCollectNowOrders,function(req,res,next){
+    res.render('staff-collect', {title: 'Project Papyrus', order_array: req.collect_order_array});    
+})
+
+router.get('/archived', getAllCompletedOrders,function(req,res,next){
+    res.render('staff-archived', {title: 'Project Papyrus', order_array: req.completed_order_array});
+})
+
+router.post ('/archived/:order_id', markAsCollected, function(req,res,next){
+    res.status(200);
+    res.redirect('/staff-dashboard/collect');
 })
 
 
