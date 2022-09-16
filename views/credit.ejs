@@ -8,6 +8,8 @@
         <meta name="author" content="" />
         <title>Admin Dashboard - Pending</title>
         <link href="/stylesheets/styles.css" rel="stylesheet" />
+        <link href="/stylesheets/user-styles.css" rel="stylesheet" />
+        <link href="/stylesheets/user-styles2.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -22,12 +24,12 @@
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-            <!-- <div class="input-group">
+            <!-- <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            <div class="input-group">
                     <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
                     <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
                 </div>-->
-            </form>
+            <!-- </form> -->
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
@@ -56,7 +58,7 @@
                                 Dashboard
                             </a>
                          <!--<div class="sb-sidenav-menu-heading">Interface</div>-->   
-                            <a class="nav-link collapsed" href="/staff-dashboard/pending" style="background-color: rgb(169, 232, 169);" >
+                            <a class="nav-link collapsed" href="/staff-dashboard/pending">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Pending Orders
                                 
@@ -72,7 +74,7 @@
                                 Completed & Archived
                                
                             </a>
-                            <a class="nav-link collapsed" href="/staff-dashboard/credit" >
+                            <a class="nav-link collapsed" href="/staff-dashboard/credit" style="background-color: rgb(169, 232, 169);"  >
                                 <div class="sb-nav-link-icon"><i class="fas fa-archive"></i></div>
                                 Add Credit
                                
@@ -89,68 +91,23 @@
             <div id="layoutSidenav_content">
                 <main>
                     <br>
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4">Pending Orders</h1>
-                        <button class="button-33" role="button">Help</button>
-                        <div class="container">
-                            <div class="row justify-content-center">
-                            <div class="col-md-6 text-center mb-5">
-                            </div>
-                            </div>
-                            <div class="row">
-                            <div class="col-md-12">
-                            <div class="table-wrap">
-                            <table class="table ">
-                            <thead>
-                            <tr>
-                            <th>FILE</th>
-                            <th>CATEGORY</th>
-                            <th>TOKEN</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
+                    <div class="container-fluid px-5 frame py-5 mt-auto">
+        
+                    <form method="post" action="/staff-dashboard/credit">
+                        
+                        <label for="email">Email</label>
+                        <input type="text" id="email" name="email" required>&nbsp; &nbsp; &nbsp; 
+                        <label for="credit">Credit Amount</label>
+                        <input type="number" id="credit" name="credit" required>
                     
-                            <tr>
-                            <th scope="row"></th>
-                            <td>##</td>
-                            <td>SGCE8342861</td>
-                            <td><span class="badge bg-warning text-dark">Pending</span></td>
-                            <td><i class="collapsible" aria-hidden="true"></i></td>
-                            </tr>
-                            <tr>
-                            <th scope="row"></th>
-                            <td>##</td>
-                            <td>SGCE8342861</td>
-                            <td><span class="badge bg-warning text-dark">Pending</span></td>
-                            <td>
-                                <i class="fa" aria-hidden="true"></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"></th>
-                                <td>##</td>
-                                <td>SGCE8342861</td>
-                                <td><span class="badge bg-warning text-dark">Pending</span></td>
-                                <td>
-                                    <i class="fa" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                            </tr>
-                            </tbody>
-                            </table>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-                            </section>
-                <!--  <div class="card mb-4">
-                            <div class="card-body">
-                                
-                            </div>
-                        </div>-->
-                    </div>
+                    <br><br>
+                    <button class="button-3" role="submit" type="submit">Add Credit</button>
+        </form>
+        <% if (updated == true) { %>
+            <p style="font-weight: bold;"> Account Balance of <%= email %> is now INR <%= balance %>  </p>
+            <%} else { %>
+            <% } %>
+        </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                    <!--  <div class="container-fluid px-4">

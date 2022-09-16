@@ -13,13 +13,17 @@ const {addStudent,
   markAsComplete,
   getAllCollectNowOrders,
   getAllCompletedOrders,
-  markAsCollected
+  markAsCollected,
+  creditBalance
  } = require('../controllers/controller');
 const e = require('express');
 
 
 
-let encodeUrl = parseUrl.urlencoded({ extended: false })
+// let encodeUrl = parseUrl.urlencoded({ extended: false })
+// router.use(express.json())
+
+router.use(express.urlencoded({extended: true}));
 router.use(express.json())
 
 router.get('/', function(req,res,next){
@@ -61,6 +65,15 @@ router.post ('/archived/:order_id', markAsCollected, function(req,res,next){
     res.status(200);
     res.redirect('/staff-dashboard/collect');
 })
+
+router.get('/credit', function(req,res,next){
+    res.render('credit', {title: 'Project Papyrus', updated: false});
+})
+
+router.post('/credit', body('email').trim(), body('credit').trim(), creditBalance,  function(req,res,next){
+    res.render('credit', {title: 'Project Papyrus', updated: req.updated, balance: req.balance, email:req.body.email});
+})
+
 
 
 /* GET home page. */

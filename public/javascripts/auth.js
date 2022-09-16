@@ -51,7 +51,8 @@ async function register() {
         semester: semester,
         balance: 0,
         emailVerified: false,
-        last_login: Date.now()
+        last_login: Date.now(),
+        staff: false
       }
       userRef.doc(user.uid).set(user_data)
       alert('User Created')
@@ -94,7 +95,7 @@ function login() {
       userRef.doc(user.uid).update(user_data)
 
       alert('User Logged In')
-      window.location.href = '/user-dashboard';
+      window.location.href = `/user-dashboard/${user.uid}`;
 
     })
     .catch(function (error) {
@@ -104,6 +105,18 @@ function login() {
     })
 }
 
+function logout(){
+  auth.signOut().then(() => {
+    // Sign-out successful.
+    alert('User Logged Out')
+      window.location.href = `/login`;
+  }).catch((error) => {
+    // An error happened.
+    var error_code = error.code
+      var error_message = error.message
+      alert(error_message)
+  });
+}
 
 function validate_email(email) {
   expression = /^[^@]+@\w+(\.\w+)+\w$/
@@ -131,5 +144,43 @@ function validate_field(field) {
     return false
   } else {
     return true
+  }
+}
+
+function staffLogin() {
+  email = document.getElementById('email').value
+  password = document.getElementById('password').value
+
+  if (validate_staff_email(email) == false || validate_password(password) == false) {
+    alert('Invalid Email or Password')
+    return
+  }
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(function () {
+      var user = auth.currentUser
+      const userRef = firestore.collection("users");
+      var user_data = {
+        last_login: Date.now()
+      }
+      userRef.doc(user.uid).update(user_data)
+
+      alert('User Logged In')
+      window.location.href = `/staff-dashboard`;
+
+    })
+    .catch(function (error) {
+      var error_code = error.code
+      var error_message = error.message
+      alert(error_message)
+    })
+}
+
+function validate_staff_email(email) {
+  expression = /^[^@]+@\w+(\.\w+)+\w$/
+  if (expression.test(email) == true && email == 'staff@saintgits.org') {
+    return true
+  } else {
+    return false
   }
 }

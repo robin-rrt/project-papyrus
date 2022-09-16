@@ -172,18 +172,21 @@ const getListFiles = async (req, res) => {
 
     const addOrder = async (req, res, next) => {
           // Create a reference to the organisations doc.
+          let uid = req.session.uid;
           const reproRef = firestore.collection("repro").doc("orders");
-          const userRef = firestore.collection("users");
+          const userRef = firestore.collection("users").doc(uid);
+          console.log(userRef)
           ////dummy user user@saintigits.org
           let user_uid;
-          const user_snapshot = await userRef.where('email', '==', 'user@saintgits.org').get();
-          if (user_snapshot.empty) {
-            console.log('No matching documents.');
-            return;
-          }  
-          user_snapshot.forEach(doc => {
-            user_uid= doc.id;
-          });
+          
+          // const user_snapshot = await userRef.where(doc.id, '==', uid).get();
+          // if (user_snapshot.empty) {
+          //   console.log('No matching documents. User does not exist.');
+          //   return;
+          // }  
+          // user_snapshot.forEach(doc => {
+          //   user_uid= doc.id;
+          // });
 
           // Get random document id for purchases
           const ordersRef = firestore.collection('orders').doc(); 
@@ -210,7 +213,7 @@ const getListFiles = async (req, res) => {
                   const data = {
                       created_at: new  Date(),
                       order_id: "SGCE0" + nextOrder,
-                      user_id: user_uid,
+                      user_id: req.session.uid,
                       priority: 1,
                       file_path: req.publicUrl,
                       price:  parseInt(json.copies)*(parseInt(json.colour) + parseInt(json.lamination) + parseInt(json.binding)),
@@ -268,50 +271,49 @@ const getListFiles = async (req, res) => {
             req.order_data = doc.data();
           });
 
-          const userRef = firestore.collection("users");
+          const userRef = firestore.collection("users").doc(req.session.uid);
           ////dummy user user@saintigits.org
-          let user_uid;
+          let user_uid = req.session.uid;
           let user_data;
-          const user_snapshot = await userRef.where('email', '==', 'user@saintgits.org').get();
-          if (user_snapshot.empty) {
-            console.log('No matching documents.');
-            return;
-          }  
-          user_snapshot.forEach(doc => {
-            user_uid= doc.id;
-            user_data= doc.data();
-          });
+          const user_doc = await userRef.get();
+          if (!user_doc.exists) {
+            console.log('No such document!');
+          } else {
+            user_data = user_doc.data();
+            console.log(user_data)
+          }
+
+          // const user_snapshot = await userRef.where('email', '==', 'user@saintgits.org').get();
+          // if (userRef.empty) {
+          //   console.log('No matching documents.');
+          //   return;
+          // }  
+          // user_snapshot.forEach(doc => {
+          //   user_uid= doc.id;
+          //   user_data= doc.data();
+          // });
 
           try {
               await firestore.runTransaction(async (t) => {
-                const balance = user_data.account_balance - req.order_data.price;
+                const balance = user_data.balance - req.order_data.price;
                 if (balance < 0){
-                  res.status(400).send("Transaction failure: Insufficent Balance: " + user_data.account_balance );
+                  res.status(400).send("Transaction failure: Insufficent Balance: " + user_data.balance );
                 }
                 console.log("ACCOUNT BALANCE: " + balance)
                 t.update(ordersRef.doc(order_docid), {payment_status: 'paid'});
-                t.update(userRef.doc(user_uid), {account_balance: balance});
+                t.update(userRef, {balance: balance});
               });
               console.log('Transaction success!');
             } catch (e) {
               console.log('Transaction failure: Insufficent Balance: ', e);
-              
             }
           next();
         }
 
         const getUserPendingOrders = async (req,res,next) => {
-          const userRef = firestore.collection("users");
+          const userRef = firestore.collection("users").doc(req.session.uid);
           ////dummy user user@saintigits.org
-          let user_uid;
-          const user_snapshot = await userRef.where('email', '==', 'user@saintgits.org').get();
-          if (user_snapshot.empty) {
-            console.log('No matching documents.');
-            return;
-          }  
-          user_snapshot.forEach(doc => {
-            user_uid= doc.id;
-          });
+          let user_uid = req.session.uid;
 
           const ordersRef = firestore.collection('orders');
           const orders_snapshot = await ordersRef
@@ -336,17 +338,10 @@ const getListFiles = async (req, res) => {
         }
 
         const getUserCompletedOrders = async(req,res,next) => {
-          const userRef = firestore.collection("users");
+          const userRef = firestore.collection("users").doc(req.session.uid);
           ////dummy user user@saintigits.org
-          let user_uid;
-          const user_snapshot = await userRef.where('email', '==', 'user@saintgits.org').get();
-          if (user_snapshot.empty) {
-            console.log('No matching documents.');
-            return;
-          }  
-          user_snapshot.forEach(doc => {
-            user_uid= doc.id;
-          });
+          let user_uid = req.session.uid;
+          
 
           const ordersRef = firestore.collection('orders');
           const orders_snapshot = await ordersRef
@@ -494,8 +489,67 @@ const getListFiles = async (req, res) => {
           }
         next();
         }
-      
 
+        const getUserBalance = async(req,res,next) => {
+          console.log("USER ID:" + req.session.uid);
+          const userRef = firestore.collection("users").doc(req.session.uid);
+          console.log(userRef);
+          // let user_uid = req.session.uid;
+          // let user_data;
+          
+          const user_doc = await userRef.get();
+          console.log(user_doc);
+          console.log(user_doc.data().balance);
+          req.userBalance = user_doc.data().balance;
+          
+          // if (!user_doc.exists) {
+          //   console.log('No such document!');
+          //   req.userBalance = 0;
+          // } else {
+          //   user_data = user_doc.data();
+          //   console.log(user_data)
+          //   console.log("USER ID BALANCE: " + user_data.balance)
+          //   req.userBalance = user_data.balance;
+          // }
+          
+        next();
+        }
+
+        const creditBalance = async(req,res,next) => {
+            let user_data;
+            let form_data = req.body;
+            console.log(form_data);
+
+            const userRef = firestore.collection('users');
+            const users_snapshot = await userRef
+            .where('email', '==', req.body.email)
+            .get();
+            if (users_snapshot.empty) {
+              console.log('No matching documents.');
+              return;
+            }  
+
+            users_snapshot.forEach(doc => {
+              user_data = doc.data();
+              console.log(user_data)
+            });
+            req.updated = false;
+
+            try {
+              await firestore.runTransaction(async (t) => {
+                const balance = parseInt(user_data.balance) + parseInt(req.body.credit);
+                console.log("ACCOUNT BALANCE: " + balance)
+                t.update(userRef.doc(user_data.user_id), {balance: balance});
+              });
+              console.log('Transaction success!');
+              req.updated = true;
+              req.balance = user_data.balance;
+            } catch (e) {
+              console.log('Transaction failure ', e);
+              
+            }
+        next();
+        }
 
 
 
@@ -519,7 +573,9 @@ module.exports = {
     markAsComplete,
     getAllCollectNowOrders,
     getAllCompletedOrders,
-    markAsCollected
+    markAsCollected,
+    getUserBalance,
+    creditBalance
 }
 
 
